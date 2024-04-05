@@ -1,42 +1,47 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import Auth from "./Auth";
+import SearchListItem from "./SearchListItem";
+import AlbumCard from "./AlbumCard";
 
-type Album = {
+export type TAlbum = {
     id: string;
     name: string;
-    artists: Artist[];
-    images: Image[];
-    img_s?: Image;
+    artists: TArtist[];
+    images: TImage[];
+    img_s?: TImage;
 };
 
-type Artist = {
+type TArtist = {
     id: string;
     name: string;
 };
 
-type Image = {
+type TImage = {
     height: number;
     url: string;
     width: number;
 };
 
 /**
- * TODO: create card component for showing search data -- 80% --
- * TODO: implement selection functionality
- * TODO: implement search while typing functionality
- * TODO: create selected albums list component
+ * TODO: create selected albums list component -- 80% --
+ * TODO: implement rating functionality
+ * TODO: implement date picking functionality
+ * TODO: type for selected albums with new props
  */
 
-export default function Searchbar() {
+export default function SearchBar() {
     const URL = "https://api.spotify.com/v1/search?";
     const type = "album";
     const accessToken = localStorage.getItem("access_token");
 
-    const [searchField, setSearchField] = useState("");
-    const [data, setData] = useState<Album[]>([]);
+    const [searchField, setSearchField] = useState<string>("");
+    const [data, setData] = useState<TAlbum[]>([]);
+    const [selectedAlbums, setSelectedAlbums] = useState<TAlbum[]>([]);
 
     function handleInput(e: ChangeEvent<HTMLInputElement>) {
-        setSearchField(e.target.value);
+        const inputValue = e.target.value;
+        setSearchField(inputValue);
+        fetchAlbum(inputValue);
     }
 
     function handleSubmit(e: FormEvent) {
@@ -45,18 +50,25 @@ export default function Searchbar() {
         setSearchField("");
     }
 
+    function handleClick(data: TAlbum) {
+        setSelectedAlbums([...selectedAlbums, data]);
+        setSearchField("");
+    }
+
     async function fetchAlbum(q: string) {
+        if (q === "") {
+            return;
+        }
         const res = await fetch(`${URL}q=${q}&type=${type}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${accessToken}` },
         });
 
         const resData = await res.json();
-        console.log(resData.albums.items[0].images[0]);
         setData(
-            resData.albums.items.map((album: Album) => ({
+            resData.albums.items.map((album: TAlbum) => ({
                 ...album,
-                img_s: album.images.reduce((prev: Image, curr: Image) => {
+                img_s: album.images.reduce((prev: TImage, curr: TImage) => {
                     return prev.height < curr.height ? prev : curr;
                 }),
             }))
@@ -64,7 +76,7 @@ export default function Searchbar() {
     }
 
     return (
-        <>
+        <div className="container h-screen px-6 py-4 bg-gray-400">
             <form onSubmit={(e) => handleSubmit(e)}>
                 <label htmlFor="searchbar">Search an album</label>
                 <input
@@ -76,35 +88,21 @@ export default function Searchbar() {
                 />
                 <button type="submit">Search</button>
             </form>
-            <div>
-                <ul>
-                    {data.map((album) => (
-                        <li key={`${album.name}-${album.id}`} className="my-2">
-                            <div className="flex items-center gap-4 px-2 py-2 rounded-lg bg-yellow-50 ">
-                                {album.img_s && <img src={album.img_s.url} />}
-                                <div>
-                                    <p
-                                        key={album.id}
-                                        className="text-lg text-left"
-                                    >
-                                        {album.name}
-                                    </p>
-                                    {album.artists.map((artist, index) => (
-                                        <p
-                                            key={artist.id}
-                                            className="text-sm text-left text-gray-400"
-                                        >
-                                            {index > 0 && ", "}
-                                            {artist.name}
-                                        </p>
-                                    ))}
-                                </div>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            {searchField !== "" && (
+                <div className="w-full md:w-[37rem]">
+                    <ul className="list-none">
+                        <SearchListItem data={data} onClick={handleClick} />
+                    </ul>
+                </div>
+            )}
+            {selectedAlbums.length > 0 && (
+                <div className="w-full md:w-[37rem]">
+                    <ul className="grid grid-cols-2 gap-2 list-none">
+                        <AlbumCard selectedAlbums={selectedAlbums} />
+                    </ul>
+                </div>
+            )}
             <Auth />
-        </>
+        </div>
     );
 }
