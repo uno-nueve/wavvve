@@ -70,7 +70,7 @@ const client_secret: string = import.meta.env.VITE_CLIENT_SECRET;
 //         .replace(/\//g, "_");
 // }
 
-export default function Auth() {
+export const Auth = () => {
     const [accessToken, setAccessToken] = useState("");
 
     useEffect(() => {
@@ -89,4 +89,4 @@ export default function Auth() {
     localStorage.setItem("access_token", accessToken);
 
     return <></>;
-}
+};

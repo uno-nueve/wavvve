@@ -5,9 +5,11 @@ type SearchListItemProps = {
     onClick: (data: TAlbum) => void;
 };
 
-export default function SearchListItem({ data, onClick }: SearchListItemProps) {
+export const SearchListItem = ({ data, onClick }: SearchListItemProps) => {
     function handleSelection(album: TAlbum) {
-        onClick(album);
+        const newDate = new Date();
+        const date = newDate.toLocaleDateString();
+        onClick({ ...album, date });
     }
 
     return (
@@ -18,8 +20,10 @@ export default function SearchListItem({ data, onClick }: SearchListItemProps) {
                     className="my-2"
                     onClick={() => handleSelection(album)}
                 >
-                    <div className="flex items-center h-20 gap-4 p-2 rounded-lg bg-yellow-50">
-                        {album.img_s && <img src={album.img_s.url} />}
+                    <div className="flex items-center h-20 gap-4 p-2 rounded-lg cursor-pointer bg-yellow-50">
+                        <div className="overflow-hidden rounded-md w-fit">
+                            {album.img_s && <img src={album.img_s.url} />}
+                        </div>
                         <div className="text-left">
                             <p key={album.id} className="text-lg line-clamp-1">
                                 {album.name}
@@ -41,4 +45,4 @@ export default function SearchListItem({ data, onClick }: SearchListItemProps) {
             ))}
         </>
     );
-}
+};

@@ -1,7 +1,10 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import Auth from "./Auth";
-import SearchListItem from "./SearchListItem";
-import AlbumCard from "./AlbumCard";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { Auth } from "./Auth";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { SearchListItem } from "./SearchListItem";
+import { AlbumCard } from "./AlbumCard";
+import { List } from "./ui/List";
+import { Form } from "./ui/Form";
 
 export type TAlbum = {
     id: string;
@@ -9,6 +12,8 @@ export type TAlbum = {
     artists: TArtist[];
     images: TImage[];
     img_s?: TImage;
+    rating?: string;
+    date?: string;
 };
 
 type TArtist = {
@@ -23,13 +28,10 @@ type TImage = {
 };
 
 /**
- * TODO: create selected albums list component -- 80% --
- * TODO: implement rating functionality
- * TODO: implement date picking functionality
- * TODO: type for selected albums with new props
+ * TODO: refactor ui
  */
 
-export default function SearchBar() {
+export const SearchBar = () => {
     const URL = "https://api.spotify.com/v1/search?";
     const type = "album";
     const accessToken = localStorage.getItem("access_token");
@@ -37,6 +39,8 @@ export default function SearchBar() {
     const [searchField, setSearchField] = useState<string>("");
     const [data, setData] = useState<TAlbum[]>([]);
     const [selectedAlbums, setSelectedAlbums] = useState<TAlbum[]>([]);
+
+    const { setItem, getItem } = useLocalStorage("saved_albums");
 
     function handleInput(e: ChangeEvent<HTMLInputElement>) {
         const inputValue = e.target.value;
@@ -52,57 +56,101 @@ export default function SearchBar() {
 
     function handleClick(data: TAlbum) {
         setSelectedAlbums([...selectedAlbums, data]);
+        setItem([...selectedAlbums, data]);
         setSearchField("");
     }
 
-    async function fetchAlbum(q: string) {
-        if (q === "") {
-            return;
-        }
-        const res = await fetch(`${URL}q=${q}&type=${type}`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${accessToken}` },
-        });
+    function handleDelete(album: TAlbum) {
+        const ID = album.id;
+        const updatedAlbums = selectedAlbums.filter((album) => album.id !== ID);
 
-        const resData = await res.json();
-        setData(
-            resData.albums.items.map((album: TAlbum) => ({
-                ...album,
-                img_s: album.images.reduce((prev: TImage, curr: TImage) => {
-                    return prev.height < curr.height ? prev : curr;
-                }),
-            }))
-        );
+        setSelectedAlbums(updatedAlbums);
+        setItem(updatedAlbums);
     }
 
+    function handleRating(rating: string, id: string) {
+        const rated = selectedAlbums.map((album) => {
+            if (album.id === id) {
+                return {
+                    ...album,
+                    rating: rating,
+                };
+            }
+            return album;
+        });
+        setSelectedAlbums(rated);
+        setItem(rated);
+    }
+
+    async function fetchAlbum(q: string) {
+        try {
+            if (!accessToken) return;
+
+            if (!q) {
+                console.log("Please enter a search query");
+                return;
+            }
+
+            const res = await fetch(`${URL}q=${q}&type=${type}`, {
+                method: "GET",
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+            if (!res.ok) {
+                throw new Error(`HTTP Error! Status: ${res.status}`);
+            }
+
+            const resData = await res.json();
+
+            if (!resData) {
+                throw new Error("Invalid response data");
+            }
+
+            setData(
+                resData.albums.items.map((album: TAlbum) => ({
+                    ...album,
+                    img_s: album.images.reduce((prev: TImage, curr: TImage) => {
+                        return prev.height < curr.height ? prev : curr;
+                    }),
+                }))
+            );
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        const saved_albums = getItem();
+        if (saved_albums) {
+            setSelectedAlbums(saved_albums);
+        }
+    }, []);
+
     return (
-        <div className="container h-screen px-6 py-4 bg-gray-400">
-            <form onSubmit={(e) => handleSubmit(e)}>
-                <label htmlFor="searchbar">Search an album</label>
-                <input
-                    type="text"
-                    name="searchbar"
-                    id="searchbar"
-                    value={searchField}
-                    onChange={(e) => handleInput(e)}
-                />
-                <button type="submit">Search</button>
-            </form>
+        <div className="container h-full min-h-screen px-6 py-4 bg-gray-400">
+            <Form
+                handleSubmit={handleSubmit}
+                handleInput={handleInput}
+                searchField={searchField}
+            />
             {searchField !== "" && (
-                <div className="w-full md:w-[37rem]">
-                    <ul className="list-none">
-                        <SearchListItem data={data} onClick={handleClick} />
-                    </ul>
-                </div>
+                <List variant="col">
+                    <SearchListItem data={data} onClick={handleClick} />
+                </List>
             )}
             {selectedAlbums.length > 0 && (
-                <div className="w-full md:w-[37rem]">
-                    <ul className="grid grid-cols-2 gap-2 list-none">
-                        <AlbumCard selectedAlbums={selectedAlbums} />
-                    </ul>
-                </div>
+                <>
+                    <h2 className="my-4 text-4xl text-gray-50">Your albums:</h2>
+                    <List variant="grid">
+                        <AlbumCard
+                            selectedAlbums={selectedAlbums}
+                            onClick={handleDelete}
+                            onRatingChange={handleRating}
+                        />
+                    </List>
+                </>
             )}
             <Auth />
         </div>
     );
-}
+};

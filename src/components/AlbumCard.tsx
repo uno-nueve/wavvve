@@ -1,16 +1,34 @@
 import { TAlbum } from "./SearchBar";
+import { XCircle } from "@phosphor-icons/react";
+import { Selector } from "./Selector";
 
 type AlbumCardProps = {
     selectedAlbums: TAlbum[];
+    onClick: (album: TAlbum) => void;
+    onRatingChange: (rating: string, id: string) => void;
 };
 
-export default function AlbumCard({ selectedAlbums }: AlbumCardProps) {
+export const AlbumCard = ({
+    selectedAlbums,
+    onClick,
+    onRatingChange,
+}: AlbumCardProps) => {
     return (
         <>
             {selectedAlbums.map((album: TAlbum) => (
                 <li key={album.id}>
                     <div className="flex flex-col w-full h-full p-2 bg-orange-100 rounded-lg">
-                        <div className="w-full overflow-hidden rounded-lg">
+                        <div className="flex justify-between place-items-center">
+                            <Selector
+                                album={album}
+                                onRatingChange={onRatingChange}
+                            />
+                            <button onClick={() => onClick(album)}>
+                                <XCircle size={32} />
+                            </button>
+                        </div>
+                        <p>{album.date}</p>
+                        <div className="flex w-full overflow-hidden rounded-lg aspect-square place-items-center">
                             {album.images.length >= 3 && (
                                 <img
                                     src={
@@ -22,9 +40,9 @@ export default function AlbumCard({ selectedAlbums }: AlbumCardProps) {
                             )}
                         </div>
                         <div>
-                            <p>{album.name}</p>
+                            <p key={album.id}>{album.name}</p>
                             {album.artists.map((artist) => (
-                                <span>{artist.name}</span>
+                                <span key={artist.id}>{artist.name}</span>
                             ))}
                         </div>
                     </div>
@@ -32,4 +50,4 @@ export default function AlbumCard({ selectedAlbums }: AlbumCardProps) {
             ))}
         </>
     );
-}
+};
