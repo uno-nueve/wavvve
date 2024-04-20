@@ -1,10 +1,31 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import { SearchBar, TAlbum } from "./components/SearchBar";
-import { useLocalStorage } from "./hooks/useLocalStorage";
-import { Auth } from "./components/Auth";
-import { List } from "./components/ui/List";
-import { AlbumCard } from "./components/AlbumCard";
+import { useLocalStorage } from "@hooks/useLocalStorage";
+import { List } from "@components/ui/List";
+import { AlbumCard } from "@components/AlbumCard";
+import { Auth } from "@components/Auth";
+import { SearchBar } from "@components/Searchbar";
+
+export type TAlbum = {
+    id: string;
+    name: string;
+    artists: TArtist[];
+    images: TImage[];
+    img_s?: TImage;
+    rating?: string;
+    date?: string;
+};
+
+export type TArtist = {
+    id: string;
+    name: string;
+};
+
+export type TImage = {
+    height: number;
+    url: string;
+    width: number;
+};
 
 function App() {
     const [selectedAlbums, setSelectedAlbums] = useState<TAlbum[]>([]);

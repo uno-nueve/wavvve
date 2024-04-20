@@ -1,21 +1,13 @@
-import { TAlbum } from "./SearchBar";
+import { TAlbum } from "src/App";
 // import { AddButton } from "./ui/Button";
 
 type SLIProps = {
     data: TAlbum[];
     onClick: (data: TAlbum) => void;
     searchField: string;
-    // setSearchField: React.Dispatch<React.SetStateAction<string>>;
-    // updateData: (newData: TAlbum[]) => void;
 };
 
-export const SearchListItem = ({
-    data,
-    onClick,
-    searchField,
-}: // setSearchField,
-// updateData,
-SLIProps) => {
+export const SearchListItem = ({ data, onClick, searchField }: SLIProps) => {
     function handleSelection(album: TAlbum) {
         const newDate = new Date();
         const date = newDate.toLocaleDateString();

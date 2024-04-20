@@ -1,8 +1,8 @@
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { FormEvent, ReactNode } from "react";
-import { TAlbum } from "../SearchBar";
+import { useClear } from "src/utils/useClear";
 import { ClearButton } from "./Button";
-import { useClear } from "../../utils/useClear";
+import { TAlbum } from "src/App";
 
 type FormProps = {
     data: TAlbum[];

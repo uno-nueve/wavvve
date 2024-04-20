@@ -6,8 +6,8 @@ import {
     Trash,
     CaretUp,
 } from "@phosphor-icons/react";
-import { TAlbum } from "./SearchBar";
 import { useState } from "react";
+import { TAlbum } from "src/App";
 
 export type SelectorProps = {
     album: TAlbum;

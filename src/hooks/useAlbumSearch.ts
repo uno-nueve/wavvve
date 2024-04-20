@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { TAlbum } from "../components/SearchBar";
-import { TImage } from "../components/SearchBar";
+import { TAlbum, TImage } from "src/App";
 
 export const useAlbumSearch = (accessToken: string | null, _URL: string) => {
     const [data, setData] = useState<TAlbum[]>([]);

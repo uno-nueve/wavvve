@@ -1,6 +1,6 @@
-import { TAlbum } from "./SearchBar";
-import { Selector } from "./Selector";
-import { ClearButton } from "./ui/Button";
+import { Selector } from "@components/Selector";
+import { ClearButton } from "@components/ui/Button";
+import { TAlbum, TArtist } from "src/App";
 
 type AlbumCardProps = {
     selectedAlbums: TAlbum[];
@@ -37,7 +37,7 @@ export const AlbumCard = ({
                                 >
                                     {album.name}
                                 </p>
-                                {album.artists.map((artist) => (
+                                {album.artists.map((artist: TArtist) => (
                                     <span
                                         key={artist.id}
                                         className="text-[#707070] text-sm md:text-base"

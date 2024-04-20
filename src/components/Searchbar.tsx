@@ -1,31 +1,11 @@
-import { useLocalStorage } from "../hooks/useLocalStorage";
-import { SearchListItem } from "./SearchListItem";
-import { List } from "./ui/List";
-import { useAlbumSearch } from "../hooks/useAlbumSearch";
-import { useInput } from "../hooks/useInput";
-import { Form } from "./ui/Form";
-import { useClear } from "../utils/useClear";
-
-export type TAlbum = {
-    id: string;
-    name: string;
-    artists: TArtist[];
-    images: TImage[];
-    img_s?: TImage;
-    rating?: string;
-    date?: string;
-};
-
-type TArtist = {
-    id: string;
-    name: string;
-};
-
-export type TImage = {
-    height: number;
-    url: string;
-    width: number;
-};
+import { SearchListItem } from "@components/SearchListItem";
+import { Form } from "@components/ui/Form";
+import { List } from "@components/ui/List";
+import { useClear } from "@utils/useClear";
+import { useAlbumSearch } from "@hooks/useAlbumSearch";
+import { useLocalStorage } from "@hooks/useLocalStorage";
+import { useInput } from "@hooks/useInput";
+import { TAlbum } from "src/App";
 
 type SearchBarProps = {
     selectedAlbums: TAlbum[];

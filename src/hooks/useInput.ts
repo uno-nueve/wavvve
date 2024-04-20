@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { TAlbum } from "../components/SearchBar";
+import { TAlbum } from "src/App";
 
 export const useInput = () => {
     const [searchField, setSearchField] = useState<string>("");

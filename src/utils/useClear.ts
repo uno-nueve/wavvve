@@ -1,4 +1,4 @@
-import { TAlbum } from "../components/SearchBar";
+import { TAlbum } from "src/App";
 
 export const useClear = (
     setSearchField: (value: React.SetStateAction<string>) => void,
