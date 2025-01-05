@@ -14,7 +14,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const res = await sdk.currentUser.profile();
             setUser({ ...res });
         };
-        if (!user) getUser();
+        if (location.pathname !== "/") {
+            if (!user) getUser();
+        }
     }, [target]);
 
     console.log("FROM PROVIDER:", user);
