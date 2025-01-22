@@ -2,6 +2,8 @@ import { sdk } from "../services/auth/auth";
 import { useAtom } from "jotai";
 import { sessionAtom } from "../atoms/session";
 import { Link, Navigate, Outlet } from "react-router";
+import { Header } from "@/components/ui/header/header";
+import { Tapbar } from "@/components/ui/tapbar/tapbar";
 
 export const Dashboard = () => {
     const [user, setUser] = useAtom(sessionAtom);
@@ -14,10 +16,14 @@ export const Dashboard = () => {
     if (!user) return <Link to="/signin">Login</Link>;
 
     return (
-        <>
-            <button onClick={logout}>Logout</button>
-            {user && <Navigate to={`${user.id}`} replace={true} />}
-            <Outlet />
-        </>
+        <div className="py-4">
+            <Header label="Saved albums" />
+            <div className="p-4">
+                <button onClick={logout}>Logout</button>
+                {user && <Navigate to={`${user.id}`} replace={true} />}
+                <Outlet />
+            </div>
+            <Tapbar />
+        </div>
     );
 };
