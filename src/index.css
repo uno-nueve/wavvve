@@ -3,6 +3,32 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 0 0% 13%;
+    --primary-disabled: 0 0% 55%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --secondary-hover: 0 0% 93%;
+    --disabled: 0 0% 83%;
+    --disabled-foreground: 0 0% 96%;
+    --outline-disabled-foreground: 0 0% 83%;
+    --border: 0 0% 83%;
+    --ring: 0 0% 83%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-hover: 0 84% 60%;
+    --destructive-ring: 0 74% 42%;
+    --accent: 21 100% 50%;
+}
+
+.dark {
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --primary-hover: 0 0% 96%;
+}
+
 @layer base {
     @font-face {
         font-family: "Geist";
