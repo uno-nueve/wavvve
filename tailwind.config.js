@@ -5,6 +5,7 @@ export default {
         extend: {
             fontFamily: {
                 geist: ["Geist", "sans-serif"],
+                "geist-mono": ["Geist Mono", "monospace"],
             },
             colors: {
                 primary: "hsl(var(--primary))",
