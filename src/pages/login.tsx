@@ -6,7 +6,7 @@ export const Login = () => {
     const user = useAtomValue(sessionAtom);
     const navigate = useNavigate();
 
-    if (user?.id) navigate(`/app/${user.id}`);
+    if (user?.id) navigate(`/app`, { replace: true });
 
     return <></>;
 };

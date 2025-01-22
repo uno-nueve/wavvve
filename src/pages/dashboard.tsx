@@ -1,7 +1,7 @@
 import { sdk } from "../services/auth/auth";
 import { useAtom } from "jotai";
 import { sessionAtom } from "../atoms/session";
-import { Link, Navigate, Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 import { Header } from "@/components/ui/header/header";
 import { Tapbar } from "@/components/ui/tapbar/tapbar";
 
@@ -20,7 +20,6 @@ export const Dashboard = () => {
             <Header label="Saved albums" />
             <div className="p-4">
                 <button onClick={logout}>Logout</button>
-                {user && <Navigate to={`${user.id}`} replace={true} />}
                 <Outlet />
             </div>
             <Tapbar />

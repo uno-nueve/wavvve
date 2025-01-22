@@ -6,6 +6,8 @@ import { SearchPage } from "./pages/search";
 import { HomePage } from "./pages/home";
 import { AlbumPage } from "./pages/album";
 import { ArtistPage } from "./pages/artist";
+import { CollectionPage } from "./pages/collection";
+import { UserPage } from "./pages/user";
 
 const router = createBrowserRouter([
     {
@@ -18,8 +20,10 @@ const router = createBrowserRouter([
                 element: <Dashboard />,
                 children: [
                     { element: <HomePage />, index: true },
-                    { path: ":id", element: <HomePage /> },
+                    { path: "overview", element: <HomePage /> },
+                    { path: ":id", element: <UserPage /> },
                     { path: "search", element: <SearchPage /> },
+                    { path: "collection", element: <CollectionPage /> },
                     { path: "album/:id", element: <AlbumPage /> },
                     { path: "artist/:id", element: <ArtistPage /> },
                 ],
