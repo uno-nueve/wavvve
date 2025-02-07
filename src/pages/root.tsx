@@ -14,7 +14,7 @@ export const Root = () => {
     const location = useLocation();
 
     return (
-        <div className="min-h-screen min-w-screen font-geist-mono">
+        <div className="min-h-screen text-sm min-w-screen md:text-base font-geist-mono">
             {location.pathname === "/" && <Welcome />}
             <AuthProvider>
                 <Outlet />
