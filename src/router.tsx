@@ -8,6 +8,7 @@ import { AlbumPage } from "./pages/album";
 import { ArtistPage } from "./pages/artist";
 import { CollectionPage } from "./pages/collection";
 import { UserPage } from "./pages/user";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
     {
@@ -32,6 +33,12 @@ const router = createBrowserRouter([
     },
 ]);
 
-const App = () => <RouterProvider router={router} />;
+const queryClient = new QueryClient();
+
+const App = () => (
+    <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+    </QueryClientProvider>
+);
 
 export default App;
