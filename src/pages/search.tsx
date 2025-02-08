@@ -1,9 +1,9 @@
-import { filterAtom } from "@/atoms/filters";
+import { filterAtom, searchHistoryAtom } from "@/atoms";
 import { Button } from "@/components/ui/button/button";
-import { sdk } from "@/services/auth/auth";
+import { sdk } from "@/services";
 import { Artist, Image, SimplifiedAlbum, Track } from "@spotify/web-api-ts-sdk";
 import { useAtom, useAtomValue } from "jotai";
-import { Ellipsis } from "lucide-react";
+import { Ellipsis, MoveUpLeft } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 type SearchResults = {
@@ -16,12 +16,18 @@ export const SearchPage = () => {
     const [query, setQuery] = useState("");
     const [searchResults, setSearchResults] = useState<SearchResults>();
     const filter = useAtomValue(filterAtom);
+    const [history, setHistory] = useAtom(searchHistoryAtom);
+    const [loading, setLoading] = useState(false);
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
+
         if (!query) return;
+
+        setLoading(true);
         try {
             const res = await sdk.search(query, ["artist", "album", "track"]);
+
             setSearchResults({
                 artists: res.artists.items,
                 albums: res.albums.items,
@@ -29,6 +35,14 @@ export const SearchPage = () => {
             });
         } catch (error) {
             console.error("Search failed", error);
+        } finally {
+            setLoading(false);
+
+            if (history) {
+                setHistory(history.includes(query) ? history : [...history, query]);
+            } else {
+                setHistory([query]);
+            }
         }
     }
 
@@ -40,6 +54,7 @@ export const SearchPage = () => {
                         id="search"
                         name="search"
                         type="text"
+                        value={query}
                         onChange={(e) => setQuery(e.currentTarget.value)}
                         className="w-full p-2 border focus-visible:bg-white focus:outline-0 focus-visible:inset-ring-1"
                     />
@@ -48,12 +63,24 @@ export const SearchPage = () => {
                     </button>
                 </label>
             </form>
+            {!searchResults &&
+                !loading &&
+                history?.map((entry) => (
+                    <div
+                        className="flex items-center gap-2 p-2 text-neutral-400 hover:text-neutral-600"
+                        key={entry}
+                        onClick={() => setQuery(entry)}
+                    >
+                        {entry}
+                        <MoveUpLeft height={14} width={14} />
+                    </div>
+                ))}
             {searchResults && (
                 <div>
                     <div className="flex justify-between w-full">
-                        <FilterButton value="artists" />
-                        <FilterButton value="albums" />
-                        <FilterButton value="tracks" />
+                        <FilterButton label="artists" />
+                        <FilterButton label="albums" />
+                        <FilterButton label="tracks" />
                     </div>
                     {filter === "albums" && <SearchList results={searchResults.albums} />}
                     {filter === "artists" && <SearchList results={searchResults.artists} />}
@@ -64,17 +91,17 @@ export const SearchPage = () => {
     );
 };
 
-export const FilterButton = ({ value }: { value: "artists" | "albums" | "tracks" }) => {
+export const FilterButton = ({ label }: { label: "artists" | "albums" | "tracks" }) => {
     const [filter, setFilter] = useAtom(filterAtom);
 
     return (
         <button
-            onClick={() => setFilter(value)}
+            onClick={() => setFilter(label)}
             className={`border-b-2 p-4 capitalize w-full ${
-                filter === value ? "border-black" : "border-neutral-300"
+                filter === label ? "border-black" : "border-neutral-300"
             }`}
         >
-            {value}
+            {label}
         </button>
     );
 };
