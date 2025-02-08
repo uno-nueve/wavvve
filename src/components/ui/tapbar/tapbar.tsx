@@ -1,9 +1,9 @@
 import { House, Library, Search, User } from "lucide-react";
-import { Button } from "../button/button";
 import { NavLink } from "react-router";
 import { useAtomValue } from "jotai";
-import { sessionAtom } from "@/atoms/session";
 import { ReactNode } from "react";
+import { sessionAtom } from "@/atoms";
+import { Button } from "@/components";
 
 const NavButton = ({ target, children }: { target: string; children: ReactNode }) => {
     return (

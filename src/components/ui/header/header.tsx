@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react";
-import { Button } from "../button/button";
+import { Button } from "@/components";
 import { useLocation, useNavigate } from "react-router";
 
 export const Header = ({ label }: { label: string }) => {

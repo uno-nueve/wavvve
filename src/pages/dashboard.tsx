@@ -1,8 +1,7 @@
+import { sessionAtom } from "@/atoms";
+import { Header, Tapbar } from "@/components";
 import { useAtomValue } from "jotai";
-import { sessionAtom } from "../atoms/session";
 import { Link, Outlet } from "react-router";
-import { Header } from "@/components/ui/header/header";
-import { Tapbar } from "@/components/ui/tapbar/tapbar";
 
 export const Dashboard = () => {
     const user = useAtomValue(sessionAtom);

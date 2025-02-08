@@ -1,8 +1,8 @@
 import { ReactNode, useEffect } from "react";
 import { useAtom } from "jotai";
-import { sessionAtom } from "../../atoms/session";
-import { sdk } from "../../services/auth/auth";
 import { useLocation } from "react-router";
+import { sessionAtom } from "@/atoms";
+import { sdk } from "@/services";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useAtom(sessionAtom);
@@ -18,9 +18,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (!user) getUser();
         }
     }, [target]);
-
-    console.log("FROM PROVIDER:", user);
-    console.log("TARGET:", target);
 
     return <>{children}</>;
 };

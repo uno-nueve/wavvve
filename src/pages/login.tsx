@@ -1,5 +1,5 @@
+import { sessionAtom } from "@/atoms";
 import { useAtomValue } from "jotai";
-import { sessionAtom } from "../atoms/session";
 import { useNavigate } from "react-router";
 
 export const Login = () => {

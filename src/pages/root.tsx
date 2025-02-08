@@ -1,5 +1,5 @@
+import { AuthProvider } from "@/components";
 import { Link, Outlet, useLocation } from "react-router";
-import { AuthProvider } from "../components/auth/authProvider";
 
 const Welcome = () => {
     return (

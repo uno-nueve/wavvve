@@ -1,5 +1,5 @@
-import { sessionAtom } from "@/atoms/session";
-import { sdk } from "@/services/auth/auth";
+import { sessionAtom } from "@/atoms";
+import { sdk } from "@/services";
 import { useAtom } from "jotai";
 
 export const UserPage = () => {

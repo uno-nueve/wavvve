@@ -1,14 +1,16 @@
 import { createBrowserRouter, RouterProvider } from "react-router";
-import { Root } from "./pages/root";
-import { Login } from "./pages/login";
-import { Dashboard } from "./pages/dashboard";
-import { SearchPage } from "./pages/search";
-import { HomePage } from "./pages/home";
-import { AlbumPage } from "./pages/album";
-import { ArtistPage } from "./pages/artist";
-import { CollectionPage } from "./pages/collection";
-import { UserPage } from "./pages/user";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+    AlbumPage,
+    ArtistPage,
+    CollectionPage,
+    Dashboard,
+    HomePage,
+    Login,
+    Root,
+    SearchPage,
+    UserPage,
+} from "@/pages";
 
 const router = createBrowserRouter([
     {
